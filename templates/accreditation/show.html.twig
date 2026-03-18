@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accreditation{% endblock %}
+
+{% block body %}
+    <h1>Accreditation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ accreditation.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ accreditation.nom }}</td>
+            </tr>
+            <tr>
+                <th>Organisme</th>
+                <td>{{ accreditation.organisme }}</td>
+            </tr>
+            <tr>
+                <th>Niveau</th>
+                <td>{{ accreditation.niveau }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_accreditation_index') }}">back to list</a>
+
+    <a href="{{ path('app_accreditation_edit', {'id': accreditation.id}) }}">edit</a>
+
+    {{ include('accreditation/_delete_form.html.twig') }}
+{% endblock %}

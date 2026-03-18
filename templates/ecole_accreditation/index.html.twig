@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EcoleAccreditation index{% endblock %}
+
+{% block body %}
+    <h1>EcoleAccreditation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DateObtention</th>
+                <th>DateExpi</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ecole_accreditation in ecole_accreditations %}
+            <tr>
+                <td>{{ ecole_accreditation.id }}</td>
+                <td>{{ ecole_accreditation.dateObtention ? ecole_accreditation.dateObtention|date('Y-m-d') : '' }}</td>
+                <td>{{ ecole_accreditation.dateExpi ? ecole_accreditation.dateExpi|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_ecole_accreditation_show', {'id': ecole_accreditation.id}) }}">show</a>
+                    <a href="{{ path('app_ecole_accreditation_edit', {'id': ecole_accreditation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ecole_accreditation_new') }}">Create new</a>
+{% endblock %}

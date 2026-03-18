@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DomaineFormation index{% endblock %}
+
+{% block body %}
+    <h1>DomaineFormation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Slug</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for domaine_formation in domaine_formations %}
+            <tr>
+                <td>{{ domaine_formation.id }}</td>
+                <td>{{ domaine_formation.nom }}</td>
+                <td>{{ domaine_formation.slug }}</td>
+                <td>{{ domaine_formation.description }}</td>
+                <td>
+                    <a href="{{ path('app_domaine_formation_show', {'id': domaine_formation.id}) }}">show</a>
+                    <a href="{{ path('app_domaine_formation_edit', {'id': domaine_formation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_domaine_formation_new') }}">Create new</a>
+{% endblock %}

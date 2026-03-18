@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Supfinder — Recherche d'enseignement supérieur{% endblock %}</title>
+        <meta name="description" content="Supfinder : recherchez les écoles, formations et accréditations du supérieur.">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body class="layout">
+        <header class="site-header">
+            <div class="container">
+                <a class="brand" href="{{ path('app_ecole_index') }}">
+                    <img class="brand__logo" src="{{ asset('images/logo.svg') }}" alt="Supfinder logo" width="40" height="40">
+                    <span class="brand__label">Supfinder</span>
+                </a>
+
+                <nav class="main-nav" aria-label="Navigation principale">
+                    <a href="{{ path('app_ecole_index') }}">Écoles</a>
+                    <a href="{{ path('app_formation_index') }}">Formations</a>
+                    <a href="{{ path('app_accreditation_index') }}">Accréditations</a>
+                    <a href="{{ path('app_status_index') }}">Statuts</a>
+                    <a href="{{ path('app_group_index') }}">Groupes</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="site-main">
+            {% block body %}{% endblock %}
+        </main>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>© {{ "now"|date("Y") }} Supfinder — Recherche d'enseignement supérieur.</p>
+                <p><a href="#">À propos</a> • <a href="#">Contact</a></p>
+            </div>
+        </footer>
+    </body>
+</html>

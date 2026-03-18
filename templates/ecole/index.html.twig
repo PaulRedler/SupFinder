@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Écoles — Supfinder{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <div class="page-header__heading">
+            <h1>Écoles</h1>
+            <p class="lead">Retrouvez toutes les écoles référencées et consultez leurs informations.</p>
+        </div>
+        <div class="page-header__actions">
+            <a class="btn btn-primary" href="{{ path('app_ecole_new') }}">Ajouter une école</a>
+        </div>
+    </div>
+
+    {% if ecoles is empty %}
+        <div class="empty-state">
+            <p>Aucune école trouvée pour le moment.</p>
+            <a class="btn" href="{{ path('app_ecole_new') }}">Créer la première école</a>
+        </div>
+    {% else %}
+        <div class="cards cards--grid">
+            {% for ecole in ecoles %}
+                <article class="card">
+                    <div class="card__media">
+                        {% if ecole.logoUrl %}
+                            <img src="{{ asset(ecole.logoUrl) }}" alt="Logo de {{ ecole.nom }}" loading="lazy">
+                        {% else %}
+                            <img src="{{ asset('images/logo.svg') }}" alt="Logo Supfinder" loading="lazy">
+                        {% endif %}
+                    </div>
+
+                    <div class="card__content">
+                        <h2 class="card__title">{{ ecole.nom }}</h2>
+                        {% if ecole.titre %}
+                            <p class="card__subtitle">{{ ecole.titre }}</p>
+                        {% endif %}
+
+                        {% if ecole.descriptionCourte %}
+                            <p class="card__text">{{ ecole.descriptionCourte }}</p>
+                        {% endif %}
+
+                        <div class="card__meta">
+                            {% if ecole.siteWeb %}
+                                <a class="link" href="{{ ecole.siteWeb }}" target="_blank" rel="noopener">Site web</a>
+                            {% endif %}
+
+                            {% if ecole.emailContact %}
+                                <a class="link" href="mailto:{{ ecole.emailContact }}">Contact</a>
+                            {% endif %}
+                        </div>
+
+                        <div class="card__actions">
+                            <a class="btn btn-outline" href="{{ path('app_ecole_show', {'id': ecole.id}) }}">Voir</a>
+                            <a class="btn btn-secondary" href="{{ path('app_ecole_edit', {'id': ecole.id}) }}">Modifier</a>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        {% if pagination.pages > 1 %}
+            <nav class="pagination" aria-label="Pagination">
+                <div class="pagination__info">
+                    Page {{ pagination.page }} sur {{ pagination.pages }} — {{ pagination.total }} écoles
+                </div>
+
+                <div class="pagination__controls">
+                    {% if pagination.page > 1 %}
+                        <a class="btn btn-outline" href="{{ path('app_ecole_index', {page: pagination.page - 1}) }}">Précédent</a>
+                    {% endif %}
+
+                    {% for p in 1..pagination.pages %}
+                        <a
+                            class="btn {% if p == pagination.page %}btn-primary{% else %}btn-outline{% endif %}"
+                            href="{{ path('app_ecole_index', {page: p}) }}"
+                        >
+                            {{ p }}
+                        </a>
+                    {% endfor %}
+
+                    {% if pagination.page < pagination.pages %}
+                        <a class="btn btn-outline" href="{{ path('app_ecole_index', {page: pagination.page + 1}) }}">Suivant</a>
+                    {% endif %}
+                </div>
+            </nav>
+        {% endif %}
+    {% endif %}
+{% endblock %}

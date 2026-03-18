@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accreditation index{% endblock %}
+
+{% block body %}
+    <h1>Accreditation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Organisme</th>
+                <th>Niveau</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for accreditation in accreditations %}
+            <tr>
+                <td>{{ accreditation.id }}</td>
+                <td>{{ accreditation.nom }}</td>
+                <td>{{ accreditation.organisme }}</td>
+                <td>{{ accreditation.niveau }}</td>
+                <td>
+                    <a href="{{ path('app_accreditation_show', {'id': accreditation.id}) }}">show</a>
+                    <a href="{{ path('app_accreditation_edit', {'id': accreditation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_accreditation_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New EcoleAccreditation{% endblock %}
+
+{% block body %}
+    <h1>Create new EcoleAccreditation</h1>
+
+    {{ include('ecole_accreditation/_form.html.twig') }}
+
+    <a href="{{ path('app_ecole_accreditation_index') }}">back to list</a>
+{% endblock %}

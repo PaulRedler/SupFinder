@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EcoleAccreditation{% endblock %}
+
+{% block body %}
+    <h1>EcoleAccreditation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ecole_accreditation.id }}</td>
+            </tr>
+            <tr>
+                <th>DateObtention</th>
+                <td>{{ ecole_accreditation.dateObtention ? ecole_accreditation.dateObtention|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DateExpi</th>
+                <td>{{ ecole_accreditation.dateExpi ? ecole_accreditation.dateExpi|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ecole_accreditation_index') }}">back to list</a>
+
+    <a href="{{ path('app_ecole_accreditation_edit', {'id': ecole_accreditation.id}) }}">edit</a>
+
+    {{ include('ecole_accreditation/_delete_form.html.twig') }}
+{% endblock %}

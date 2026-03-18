@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New DomaineFormation{% endblock %}
+
+{% block body %}
+    <h1>Create new DomaineFormation</h1>
+
+    {{ include('domaine_formation/_form.html.twig') }}
+
+    <a href="{{ path('app_domaine_formation_index') }}">back to list</a>
+{% endblock %}

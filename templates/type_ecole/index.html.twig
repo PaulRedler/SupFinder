@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TypeEcole index{% endblock %}
+
+{% block body %}
+    <h1>TypeEcole index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Info</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for type_ecole in type_ecoles %}
+            <tr>
+                <td>{{ type_ecole.id }}</td>
+                <td>{{ type_ecole.libelle }}</td>
+                <td>{{ type_ecole.info }}</td>
+                <td>
+                    <a href="{{ path('app_type_ecole_show', {'id': type_ecole.id}) }}">show</a>
+                    <a href="{{ path('app_type_ecole_edit', {'id': type_ecole.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_type_ecole_new') }}">Create new</a>
+{% endblock %}

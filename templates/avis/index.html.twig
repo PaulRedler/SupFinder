@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis index{% endblock %}
+
+{% block body %}
+    <h1>Avis index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Avis</th>
+                <th>NoteEnseignement</th>
+                <th>Commentaire</th>
+                <th>Titre</th>
+                <th>NoteGlobale</th>
+                <th>Modere</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for avi in avis %}
+            <tr>
+                <td>{{ avi.id }}</td>
+                <td>{{ avi.avis }}</td>
+                <td>{{ avi.noteEnseignement }}</td>
+                <td>{{ avi.commentaire }}</td>
+                <td>{{ avi.titre }}</td>
+                <td>{{ avi.noteGlobale }}</td>
+                <td>{{ avi.modere ? 'Yes' : 'No' }}</td>
+                <td>{{ avi.createdAt ? avi.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_avis_show', {'id': avi.id}) }}">show</a>
+                    <a href="{{ path('app_avis_edit', {'id': avi.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_avis_new') }}">Create new</a>
+{% endblock %}
