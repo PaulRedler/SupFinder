@@ -19,16 +19,19 @@
         <header class="site-header">
             <div class="container">
                 <a class="brand" href="{{ path('app_ecole_index') }}">
-                    <img class="brand__logo" src="{{ asset('images/logo.svg') }}" alt="Supfinder logo" width="40" height="40">
-                    <span class="brand__label">Supfinder</span>
+                    <span class="brand__label">SupFinder</span>
                 </a>
 
                 <nav class="main-nav" aria-label="Navigation principale">
-                    <a href="{{ path('app_ecole_index') }}">Écoles</a>
-                    <a href="{{ path('app_formation_index') }}">Formations</a>
-                    <a href="{{ path('app_accreditation_index') }}">Accréditations</a>
-                    <a href="{{ path('app_status_index') }}">Statuts</a>
-                    <a href="{{ path('app_group_index') }}">Groupes</a>
+                    <a href="{{ path('app_ecole_index') }}">Accueil</a>
+                    <a href="{{ path('app_formation_index') }}">Toutes les formations</a>
+                    <a href="{{ path('app_ecole_index') }}">Toutes les écoles</a>
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}" style="color: var(--color-marianne-blue);">Déconnexion ({{ app.user.prenom }})</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" style="color: var(--color-marianne-blue);">Connexion</a>
+                        <a href="{{ path('app_register') }}" style="color: var(--color-marianne-blue);">S'inscrire</a>
+                    {% endif %}
                 </nav>
             </div>
         </header>
@@ -38,9 +41,22 @@
         </main>
 
         <footer class="site-footer">
-            <div class="container">
-                <p>© {{ "now"|date("Y") }} Supfinder — Recherche d'enseignement supérieur.</p>
-                <p><a href="#">À propos</a> • <a href="#">Contact</a></p>
+            <div class="container footer-content">
+                <div class="footer-brand">
+                    <span class="brand__label">SupFinder</span>
+                    <p class="footer-desc">Le portail de recherche d'enseignement supérieur.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Plan du site</a>
+                    <a href="#">Mentions légales</a>
+                    <a href="#">Données personnelles</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <p>© {{ "now"|date("Y") }} SupFinder</p>
+                </div>
             </div>
         </footer>
     </body>

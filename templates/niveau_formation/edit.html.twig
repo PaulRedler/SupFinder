@@ -9,5 +9,5 @@
 
     <a href="{{ path('app_niveau_formation_index') }}">back to list</a>
 
-    {{ include('niveau_formation/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}{{ include('niveau_formation/_delete_form.html.twig') }}{% endif %}
 {% endblock %}

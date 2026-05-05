@@ -3,56 +3,77 @@
 {% block title %}Écoles — Supfinder{% endblock %}
 
 {% block body %}
-    <div class="page-header">
-        <div class="page-header__heading">
-            <h1>Écoles</h1>
-            <p class="lead">Retrouvez toutes les écoles référencées et consultez leurs informations.</p>
-        </div>
-        <div class="page-header__actions">
-            <a class="btn btn-primary" href="{{ path('app_ecole_new') }}">Ajouter une école</a>
+    <div class="hero-search">
+        <div class="hero-search__content">
+            <h1>Trouvez votre future formation ou école</h1>
+            <p class="lead">Découvrez les établissements et les formations qui correspondent à vos ambitions.</p>
+            <form method="get" action="{{ path('app_ecole_index') }}" class="search-form">
+                <input type="search" name="q" value="{{ q ?? '' }}" placeholder="Ex: Informatique, Management, Lycée..." class="search-input" aria-label="Rechercher">
+                <button type="submit" class="btn btn-primary btn-search">
+                    Rechercher
+                </button>
+            </form>
+            <div class="hero-actions">
+                {% if is_granted('ROLE_ADMIN') %}<a class="btn btn-outline-light" href="{{ path('app_ecole_new') }}">Ajouter une école</a>{% endif %}
+            </div>
         </div>
     </div>
 
     {% if ecoles is empty %}
         <div class="empty-state">
-            <p>Aucune école trouvée pour le moment.</p>
-            <a class="btn" href="{{ path('app_ecole_new') }}">Créer la première école</a>
+            <p>Aucun résultat trouvé pour votre recherche.</p>
+            <a class="btn btn-primary" href="{{ path('app_ecole_index') }}">Réinitialiser la recherche</a>
         </div>
     {% else %}
         <div class="cards cards--grid">
-            {% for ecole in ecoles %}
+            {% for ecole in ecoles %}  
                 <article class="card">
                     <div class="card__media">
-                        {% if ecole.logoUrl %}
+                        {% if ecole.logoUrl is not empty and ecole.logoUrl matches '/\\.png$/i' %}
                             <img src="{{ asset(ecole.logoUrl) }}" alt="Logo de {{ ecole.nom }}" loading="lazy">
                         {% else %}
-                            <img src="{{ asset('images/logo.svg') }}" alt="Logo Supfinder" loading="lazy">
+                            <div class="card__media--placeholder">
+                                <span class="placeholder-text">{{ ecole.nom|slice(0, 1) }}</span>
+                            </div>
                         {% endif %}
                     </div>
-
                     <div class="card__content">
-                        <h2 class="card__title">{{ ecole.nom }}</h2>
-                        {% if ecole.titre %}
-                            <p class="card__subtitle">{{ ecole.titre }}</p>
+                        <div class="card__header">
+                            <h2 class="card__title">{{ ecole.nom }}</h2>
+                            {% if ecole.titre %}
+                                <p class="card__subtitle">{{ ecole.titre }}</p>
+                            {% endif %}
+                        </div>
+
+                        {% if ecole.formations is not empty %}
+                            <div class="card__formations-list">
+                                <span class="formations-label">Formations :</span>
+                                <ul>
+                                {% for formation in ecole.formations|slice(0, 3) %}
+                                    <li>{{ formation.intitule }}</li>
+                                {% endfor %}
+                                {% if ecole.formations|length > 3 %}
+                                    <li class="more-formations">+ {{ ecole.formations|length - 3 }} autres</li>
+                                {% endif %}
+                                </ul>
+                            </div>
                         {% endif %}
 
                         {% if ecole.descriptionCourte %}
-                            <p class="card__text">{{ ecole.descriptionCourte }}</p>
+                            <p class="card__text">{{ ecole.descriptionCourte|slice(0, 120) }}{% if ecole.descriptionCourte|length > 120 %}...{% endif %}</p>
                         {% endif %}
 
                         <div class="card__meta">
-                            {% if ecole.siteWeb %}
-                                <a class="link" href="{{ ecole.siteWeb }}" target="_blank" rel="noopener">Site web</a>
-                            {% endif %}
-
                             {% if ecole.emailContact %}
                                 <a class="link" href="mailto:{{ ecole.emailContact }}">Contact</a>
                             {% endif %}
                         </div>
 
                         <div class="card__actions">
-                            <a class="btn btn-outline" href="{{ path('app_ecole_show', {'id': ecole.id}) }}">Voir</a>
-                            <a class="btn btn-secondary" href="{{ path('app_ecole_edit', {'id': ecole.id}) }}">Modifier</a>
+                            <a class="btn btn-primary" href="{{ path('app_ecole_show', {'id': ecole.id}) }}">Voir la fiche</a>
+                            {% if ecole.siteWeb %}
+                                <a class="btn btn-outline" href="{{ ecole.siteWeb }}" target="_blank" rel="noopener">Site web</a>
+                            {% endif %}
                         </div>
                     </div>
                 </article>
@@ -70,7 +91,14 @@
                         <a class="btn btn-outline" href="{{ path('app_ecole_index', {page: pagination.page - 1}) }}">Précédent</a>
                     {% endif %}
 
-                    {% for p in 1..pagination.pages %}
+                    {% set startPage = max(1, pagination.page - 2) %}
+                    {% set endPage = min(pagination.pages, pagination.page + 2) %}
+
+                    {% if startPage > 1 %}
+                        <span class="pagination-ellipsis" style="padding: 0.5rem; color: var(--color-muted);">&hellip;</span>
+                    {% endif %}
+
+                    {% for p in startPage..endPage %}
                         <a
                             class="btn {% if p == pagination.page %}btn-primary{% else %}btn-outline{% endif %}"
                             href="{{ path('app_ecole_index', {page: p}) }}"
@@ -78,6 +106,10 @@
                             {{ p }}
                         </a>
                     {% endfor %}
+
+                    {% if endPage < pagination.pages %}
+                        <span class="pagination-ellipsis" style="padding: 0.5rem; color: var(--color-muted);">&hellip;</span>
+                    {% endif %}
 
                     {% if pagination.page < pagination.pages %}
                         <a class="btn btn-outline" href="{{ path('app_ecole_index', {page: pagination.page + 1}) }}">Suivant</a>

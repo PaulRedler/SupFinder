@@ -28,7 +28,7 @@
 
     <a href="{{ path('app_domaine_formation_index') }}">back to list</a>
 
-    <a href="{{ path('app_domaine_formation_edit', {'id': domaine_formation.id}) }}">edit</a>
+    {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_domaine_formation_edit', {'id': domaine_formation.id}) }}">edit</a>{% endif %}
 
-    {{ include('domaine_formation/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}{{ include('domaine_formation/_delete_form.html.twig') }}{% endif %}
 {% endblock %}

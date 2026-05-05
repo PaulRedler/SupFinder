@@ -32,12 +32,19 @@ class EcoleRepository extends ServiceEntityRepository
      *     limit: int,
      * }
      */
-    public function findPaginated(int $page = 1, int $limit = 12): array
+    public function findPaginated(int $page = 1, int $limit = 12, ?string $searchQuery = null): array
     {
         $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.formations', 'f')
+            ->addSelect('f')
             ->orderBy('e.nom', 'ASC')
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
+
+        if ($searchQuery) {
+            $qb->andWhere('e.nom LIKE :search OR f.intitule LIKE :search OR e.descriptionCourte LIKE :search')
+               ->setParameter('search', '%' . $searchQuery . '%');
+        }
 
         $query = $qb->getQuery();
 

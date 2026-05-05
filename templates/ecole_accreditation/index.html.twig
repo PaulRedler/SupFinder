@@ -22,7 +22,7 @@
                 <td>{{ ecole_accreditation.dateExpi ? ecole_accreditation.dateExpi|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('app_ecole_accreditation_show', {'id': ecole_accreditation.id}) }}">show</a>
-                    <a href="{{ path('app_ecole_accreditation_edit', {'id': ecole_accreditation.id}) }}">edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_ecole_accreditation_edit', {'id': ecole_accreditation.id}) }}">edit</a>{% endif %}
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_ecole_accreditation_new') }}">Create new</a>
+    {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_ecole_accreditation_new') }}">Create new</a>{% endif %}
 {% endblock %}

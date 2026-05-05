@@ -5,24 +5,28 @@ namespace App\Controller;
 use App\Entity\Ecole;
 use App\Form\EcoleType;
 use App\Repository\EcoleRepository;
+use App\Repository\FormationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/ecole')]
+#[Route('/')]
 final class EcoleController extends AbstractController
 {
     #[Route(name: 'app_ecole_index', methods: ['GET'])]
-    public function index(Request $request, EcoleRepository $ecoleRepository): Response
+    public function index(Request $request, EcoleRepository $ecoleRepository, FormationRepository $formationRepository): Response
     {
         $page = max(1, (int) $request->query->get('page', 1));
-        $pagination = $ecoleRepository->findPaginated($page, 12);
+        $q = $request->query->get('q');
+        
+        $pagination = $ecoleRepository->findPaginated($page, 12, $q);
 
         return $this->render('ecole/index.html.twig', [
             'ecoles' => $pagination['items'],
             'pagination' => $pagination,
+            'q' => $q,
         ]);
     }
 
@@ -46,7 +50,7 @@ final class EcoleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_ecole_show', methods: ['GET'])]
+    #[Route('/{id<\\d+>}', name: 'app_ecole_show', methods: ['GET'])]
     public function show(Ecole $ecole): Response
     {
         return $this->render('ecole/show.html.twig', [
@@ -54,7 +58,7 @@ final class EcoleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_ecole_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id<\\d+>}/edit', name: 'app_ecole_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ecole $ecole, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(EcoleType::class, $ecole);
@@ -72,7 +76,7 @@ final class EcoleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_ecole_delete', methods: ['POST'])]
+    #[Route('/{id<\\d+>}', name: 'app_ecole_delete', methods: ['POST'])]
     public function delete(Request $request, Ecole $ecole, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ecole->getId(), $request->getPayload()->getString('_token'))) {

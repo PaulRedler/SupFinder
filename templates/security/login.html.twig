@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="container" style="max-width: 500px; margin-top: 4rem; margin-bottom: 4rem;">
+    <form method="post">
+        {% if error %}
+            <div style="color: red; margin-bottom: 1rem; padding: 1rem; background: #fee2e2; border-radius: var(--radius);">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div style="margin-bottom: 1rem; padding: 1rem; background: #e0f2fe; border-radius: var(--radius);">
+                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+            </div>
+        {% endif %}
+
+        <h1 style="margin-bottom: 1.5rem; color: var(--color-heading); font-size: 2rem; text-align: center;">Connexion</h1>
+        
+        <div style="margin-bottom: 1rem;">
+            <label for="username" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email</label>
+            <input type="email" value="{{ last_username }}" name="_username" id="username" class="search-input" autocomplete="email" required autofocus style="width: 100%; border: 1px solid var(--color-border); background: white;">
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Mot de passe</label>
+            <input type="password" name="_password" id="password" class="search-input" autocomplete="current-password" required style="width: 100%; border: 1px solid var(--color-border); background: white;">
+        </div>
+
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+
+        <button class="btn btn-primary" type="submit" style="width: 100%;">
+            Se connecter
+        </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous ici</a>.</p>
+    </div>
+</div>
+{% endblock %}

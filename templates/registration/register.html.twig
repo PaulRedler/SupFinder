@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="container" style="max-width: 500px; margin-top: 4rem; margin-bottom: 4rem;">
+    <h1 style="margin-bottom: 1.5rem; color: var(--color-heading); font-size: 2rem; text-align: center;">Inscription</h1>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+        <div style="margin-bottom: 1rem;">
+            {{ form_label(registrationForm.nom, null, {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600;'}}) }}
+            {{ form_widget(registrationForm.nom) }}
+            {{ form_errors(registrationForm.nom) }}
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            {{ form_label(registrationForm.prenom, null, {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600;'}}) }}
+            {{ form_widget(registrationForm.prenom) }}
+            {{ form_errors(registrationForm.prenom) }}
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            {{ form_label(registrationForm.email, null, {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600;'}}) }}
+            {{ form_widget(registrationForm.email) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600;'}}) }}
+            {{ form_widget(registrationForm.plainPassword.first) }}
+            {{ form_errors(registrationForm.plainPassword.first) }}
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600;'}}) }}
+            {{ form_widget(registrationForm.plainPassword.second) }}
+            {{ form_errors(registrationForm.plainPassword.second) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">S'inscrire</button>
+    {{ form_end(registrationForm) }}
+    
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <p>Déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous ici</a>.</p>
+    </div>
+</div>
+{% endblock %}

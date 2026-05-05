@@ -3,56 +3,100 @@
 {% block title %}Ecole{% endblock %}
 
 {% block body %}
-    <h1>Ecole</h1>
+<div class="school-header">
+    <div class="container school-header__inner">
+        <div class="school-header__logo">
+            {% if ecole.logoUrl is not empty and ecole.logoUrl matches '/\\.png$/i' %}
+                <img src="{{ asset(ecole.logoUrl) }}" alt="Logo {{ ecole.nom }}">
+            {% else %}
+                <div class="school-header__logo-placeholder">
+                    {{ ecole.nom|slice(0, 1) }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="school-header__content">
+            <h1 class="school-title">{{ ecole.nom }}</h1>
+            {% if ecole.titre %}
+                <p class="school-subtitle">{{ ecole.titre }}</p>
+            {% endif %}
+            
+            <div class="school-actions">
+                {% if ecole.siteWeb %}
+                    <a href="{{ ecole.siteWeb }}" class="btn btn-primary" target="_blank" rel="noopener">Site Web</a>
+                {% endif %}
+                {% if ecole.emailContact %}
+                    <a href="mailto:{{ ecole.emailContact }}" class="btn btn-outline-light">Contact</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ ecole.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ ecole.nom }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ ecole.slug }}</td>
-            </tr>
-            <tr>
-                <th>EmailContact</th>
-                <td>{{ ecole.emailContact }}</td>
-            </tr>
-            <tr>
-                <th>SiteWeb</th>
-                <td>{{ ecole.siteWeb }}</td>
-            </tr>
-            <tr>
-                <th>DescriptionCourte</th>
-                <td>{{ ecole.descriptionCourte }}</td>
-            </tr>
-            <tr>
-                <th>DescriptionLongue</th>
-                <td>{{ ecole.descriptionLongue }}</td>
-            </tr>
-            <tr>
-                <th>LogoUrl</th>
-                <td>{{ ecole.logoUrl }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ ecole.titre }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ ecole.createdAt ? ecole.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="container school-layout">
+    <main class="school-main">
+        <section class="school-section">
+            <h2>À propos</h2>
+            {% if ecole.descriptionLongue %}
+                <div class="school-text">
+                    {{ ecole.descriptionLongue|nl2br }}
+                </div>
+            {% elseif ecole.descriptionCourte %}
+                <div class="school-text">
+                    {{ ecole.descriptionCourte }}
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune description disponible pour cet établissement.</p>
+            {% endif %}
+        </section>
 
-    <a href="{{ path('app_ecole_index') }}">back to list</a>
+        {% if ecole.formations is not empty %}
+            <section class="school-section">
+                <h2>Formations proposées ({{ ecole.formations|length }})</h2>
+                <div class="formations-list">
+                    {% for formation in ecole.formations %}
+                        <div class="formation-item">
+                            <h3 class="formation-title">{{ formation.intitule }}</h3>
+                            <div class="formation-meta">
+                                {% if formation.diplome %}
+                                    <span class="badge">{{ formation.diplome }}</span>
+                                {% endif %}
+                                {% if formation.modeFormation %}
+                                    <span class="badge badge-outline">{{ formation.modeFormation }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </main>
 
-    <a href="{{ path('app_ecole_edit', {'id': ecole.id}) }}">edit</a>
-
-    {{ include('ecole/_delete_form.html.twig') }}
+    <aside class="school-sidebar">
+        <div class="sidebar-box">
+            <h3>Informations pratiques</h3>
+            <ul class="sidebar-info">
+                {% if ecole.emailContact %}
+                    <li><strong>Email :</strong> <a href="mailto:{{ ecole.emailContact }}">{{ ecole.emailContact }}</a></li>
+                {% endif %}
+                {% if ecole.siteWeb %}
+                    <li><strong>Site web :</strong> <a href="{{ ecole.siteWeb }}" target="_blank" rel="noopener">{{ ecole.siteWeb }}</a></li>
+                {% endif %}
+                {% if ecole.status is not empty %}
+                    <li><strong>Statut :</strong> 
+                        {% for status in ecole.status %}
+                            {{ status.libelle }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        
+        <div class="sidebar-box sidebar-admin">
+            <h3>Administration</h3>
+            <a href="{{ path('app_ecole_index') }}" class="btn btn-outline" style="width:100%; margin-bottom:0.5rem">Retour à la liste</a>
+            {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_ecole_edit', {'id': ecole.id}) }}" class="btn btn-outline" style="width:100%; margin-bottom:0.5rem">Modifier la fiche</a>{% endif %}
+            {% if is_granted('ROLE_ADMIN') %}{{ include('ecole/_delete_form.html.twig') }}{% endif %}
+        </div>
+    </aside>
+</div>
 {% endblock %}

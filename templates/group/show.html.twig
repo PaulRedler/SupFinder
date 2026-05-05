@@ -20,7 +20,7 @@
 
     <a href="{{ path('app_group_index') }}">back to list</a>
 
-    <a href="{{ path('app_group_edit', {'id': group.id}) }}">edit</a>
+    {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_group_edit', {'id': group.id}) }}">edit</a>{% endif %}
 
-    {{ include('group/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}{{ include('group/_delete_form.html.twig') }}{% endif %}
 {% endblock %}

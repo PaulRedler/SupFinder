@@ -24,7 +24,7 @@
 
     <a href="{{ path('app_type_ecole_index') }}">back to list</a>
 
-    <a href="{{ path('app_type_ecole_edit', {'id': type_ecole.id}) }}">edit</a>
+    {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_type_ecole_edit', {'id': type_ecole.id}) }}">edit</a>{% endif %}
 
-    {{ include('type_ecole/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}{{ include('type_ecole/_delete_form.html.twig') }}{% endif %}
 {% endblock %}

@@ -24,7 +24,7 @@
 
     <a href="{{ path('app_status_index') }}">back to list</a>
 
-    <a href="{{ path('app_status_edit', {'id': status.id}) }}">edit</a>
+    {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_status_edit', {'id': status.id}) }}">edit</a>{% endif %}
 
-    {{ include('status/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}{{ include('status/_delete_form.html.twig') }}{% endif %}
 {% endblock %}

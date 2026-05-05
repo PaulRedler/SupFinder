@@ -24,7 +24,7 @@
                 <td>{{ niveau_formation.ordre }}</td>
                 <td>
                     <a href="{{ path('app_niveau_formation_show', {'id': niveau_formation.id}) }}">show</a>
-                    <a href="{{ path('app_niveau_formation_edit', {'id': niveau_formation.id}) }}">edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_niveau_formation_edit', {'id': niveau_formation.id}) }}">edit</a>{% endif %}
                 </td>
             </tr>
         {% else %}
@@ -35,5 +35,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_niveau_formation_new') }}">Create new</a>
+    {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_niveau_formation_new') }}">Create new</a>{% endif %}
 {% endblock %}
